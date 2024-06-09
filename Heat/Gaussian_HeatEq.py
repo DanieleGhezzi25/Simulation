@@ -26,7 +26,7 @@ line, = ax.plot(x, HeatFunction(x,0), color='red',  label=f't = {t} s')
 legend = ax.legend()
 
 def init():
-    """Initialize the animation frame."""
+    # Initialize the animation frame
     global t
     t = 0  # Reset the time to zero
     line.set_ydata(HeatFunction(x, t))
