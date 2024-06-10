@@ -1,7 +1,7 @@
 '''
 
-Animation of the heat equation with a Gaussian initial condition on an infinite bar.
-    Equation solved analytically with Fourier Transform.
+Animation of the heat equation with a constant initial condition on a finite bar (length l).
+    Equation solved analytically with Fourier Series.
 
 '''
 
@@ -9,18 +9,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-
-a = 2 # gaussian standard deviation
-T_peak = 200 # peak temperature
+l = 5 # length of the bar
+T = 20 # temperature of the bar
 k = 2.3e-5 # thermal diffusivity (iron)
-dt = 600 # time step in seconds
+dt = 3600 # time step in seconds
 time_counting = 10 # milliseconds
 
-def HeatFunction(x,t):
-    return (a*T_peak)/(np.sqrt(2*k*t+a**2))*np.exp(-1/(4*k*t+2*a**2) * x**2)
-
-x = np.linspace(-20,20,1000)
+x = np.linspace(0,l,1000)
 t = 0
+N_sum = 1000
+
+def HeatFunction(x,t):
+    u_x = np.zeros(len(x))
+    for i in range(N_sum):
+        u_x += 2*np.sqrt(2)*T/(np.pi*(2*i+1))*np.sin((2*i+1)*np.pi*x/l)*np.exp(-k*(2*i+1)**2*np.pi**2*t/l**2)
+    return u_x
 
 fig, ax = plt.subplots()
 line, = ax.plot(x, HeatFunction(x,0), color='red',  label=f't = {t} s')
@@ -46,7 +49,7 @@ ani = animation.FuncAnimation(fig, animate, init_func=init, interval=time_counti
 
 plt.xlabel('x')
 plt.ylabel('Temperature')
-plt.title(f'Heat Equation with Gaussian Initial Condition: T max = {T_peak}, dt = {dt}s')
+plt.title(f'Heat Equation with constant initial condition: T = {T}, dt = {dt}s')
 plt.grid(True)
 
 plt.show()
